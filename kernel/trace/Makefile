@@ -9,6 +9,11 @@ KBUILD_CFLAGS = $(subst $(CC_FLAGS_FTRACE),,$(ORIG_CFLAGS))
 # Avoid recursion due to instrumentation.
 KCSAN_SANITIZE := n
 
+# If instrumentation of this dir is enabled, the function tracer gets really
+# slow. Probably could be more selective here, but note that files releated
+# to tracing.shouldn't be traced anyway.
+KCOV_INSTRUMENT		:= n
+
 ifdef CONFIG_FTRACE_SELFTEST
 # selftest needs instrumentation
 CFLAGS_trace_selftest_dynamic.o = $(CC_FLAGS_FTRACE)
