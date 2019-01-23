@@ -10,24 +10,10 @@
 #include <asm/processor.h>
 
 #include "hvc_console.h"
-#include <asm/traps.h>
 
 /* DCC Status Bits */
 #define DCC_STATUS_RX		(1 << 30)
 #define DCC_STATUS_TX		(1 << 29)
-
-static int hvc_dcc_handler(struct pt_regs *regs, u32 instr) {
-	if (user_mode(regs))
-		return 1;
-	regs->pc += 4;
-	return 0;
-}
-
-static struct undef_hook hvc_dcc_hook __initdata = {
-	.instr_mask	= 0xffdffb00,
-	.instr_val	= 0xd5130100,
-	.fn		= hvc_dcc_handler,
-};
 
 static void dcc_uart_console_putchar(struct uart_port *port, int ch)
 {
@@ -104,12 +90,10 @@ static const struct hv_ops hvc_dcc_get_put_ops = {
 static int __init hvc_dcc_console_init(void)
 {
 	int ret;
-	register_undef_hook(&hvc_dcc_hook);
 
 	if (!hvc_dcc_check())
 		return -ENODEV;
 
-	unregister_undef_hook(&hvc_dcc_hook);
 	/* Returns -1 if error */
 	ret = hvc_instantiate(0, 0, &hvc_dcc_get_put_ops);
 
