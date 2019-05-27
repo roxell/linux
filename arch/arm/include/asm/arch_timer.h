@@ -84,7 +84,7 @@ static inline u32 arch_timer_get_cntfrq(void)
 	return val;
 }
 
-static inline u64 __arch_counter_get_cntpct(void)
+static __always_inline u64 __arch_counter_get_cntpct(void)
 {
 	u64 cval;
 
@@ -93,12 +93,12 @@ static inline u64 __arch_counter_get_cntpct(void)
 	return cval;
 }
 
-static inline u64 __arch_counter_get_cntpct_stable(void)
+static __always_inline u64 __arch_counter_get_cntpct_stable(void)
 {
 	return __arch_counter_get_cntpct();
 }
 
-static inline u64 __arch_counter_get_cntvct(void)
+static __always_inline u64 __arch_counter_get_cntvct(void)
 {
 	u64 cval;
 
@@ -107,7 +107,7 @@ static inline u64 __arch_counter_get_cntvct(void)
 	return cval;
 }
 
-static inline u64 __arch_counter_get_cntvct_stable(void)
+static __always_inline u64 __arch_counter_get_cntvct_stable(void)
 {
 	return __arch_counter_get_cntvct();
 }
