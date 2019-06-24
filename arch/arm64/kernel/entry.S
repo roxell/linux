@@ -610,7 +610,6 @@ SYM_CODE_END(el1_sync)
 SYM_CODE_START_LOCAL_NOALIGN(el1_irq)
 	kernel_entry 1
 	gic_prio_irq_setup pmr=x20, tmp=x1
-	enable_da_f
 
 #ifdef CONFIG_ARM64_PSEUDO_NMI
 	test_irqs_unmasked	res=x0, pmr=x20
@@ -622,6 +621,7 @@ SYM_CODE_START_LOCAL_NOALIGN(el1_irq)
 #ifdef CONFIG_TRACE_IRQFLAGS
 	bl	trace_hardirqs_off
 #endif
+	enable_da_f
 
 	irq_handler
 
