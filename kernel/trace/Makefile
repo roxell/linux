@@ -36,6 +36,13 @@ ifdef CONFIG_GCOV_PROFILE_FTRACE
 GCOV_PROFILE := y
 endif
 
+#KASAN_SANITIZE := n
+#KASAN_SANITIZE_trace.o := n
+#KASAN_SANITIZE_trace_events.o := n
+#KASAN_SANITIZE_trace_events_filter.o := n
+#KASAN_SANITIZE_trace_events_trigger.o := n
+#KASAN_SANITIZE_trace_hist.o := n
+
 CFLAGS_trace_benchmark.o := -I$(src)
 CFLAGS_trace_events_filter.o := -I$(src)
 
