@@ -12,3 +12,8 @@ KASAN_SANITIZE_physaddr.o	+= n
 
 obj-$(CONFIG_KASAN)		+= kasan_init.o
 KASAN_SANITIZE_kasan_init.o	:= n
+
+#UBSAN_SANITIZE_dump.o	:= n
+#KASAN_SANITIZE_dump.o	:= n
+#FLAGS_REMOVE_dump.o = $(CC_FLAGS_FTRACE)
+#CFLAGS_report.o := $(call cc-option, -fno-conserve-stack -fno-stack-protector)
