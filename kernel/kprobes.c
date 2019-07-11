@@ -2268,6 +2268,8 @@ static struct notifier_block kprobe_module_nb = {
 extern unsigned long __start_kprobe_blacklist[];
 extern unsigned long __stop_kprobe_blacklist[];
 
+static bool run_kprobe_tests __initdata;
+
 static int __init init_kprobes(void)
 {
 	int i, err = 0;
@@ -2319,10 +2321,18 @@ static int __init init_kprobes(void)
 	kprobes_initialized = (err == 0);
 
 	if (!err)
-		init_test_probes();
+		run_kprobe_tests = true;
 	return err;
 }
 subsys_initcall(init_kprobes);
+
+static int __init run_init_test_probes(void)
+{
+	if (run_kprobe_tests)
+		init_test_probes();
+	return 0;
+}
+module_init(run_init_test_probes);
 
 #ifdef CONFIG_DEBUG_FS
 static void report_probe(struct seq_file *pi, struct kprobe *p,
