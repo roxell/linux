@@ -127,7 +127,7 @@ repeat:
  * seqcount without any lockdep checking and without checking or
  * masking the LSB. Calling code is responsible for handling that.
  */
-static __always_inline unsigned raw_read_seqcount(const seqcount_t *s)
+static inline unsigned raw_read_seqcount(const seqcount_t *s)
 {
 	unsigned ret = READ_ONCE(s->sequence);
 	smp_rmb();
@@ -200,8 +200,7 @@ static inline unsigned raw_seqcount_begin(const seqcount_t *s)
  * Use carefully, only in critical code, and comment how the barrier is
  * provided.
  */
-static
-inline int __read_seqcount_retry(const seqcount_t *s, unsigned start)
+static inline int __read_seqcount_retry(const seqcount_t *s, unsigned start)
 {
 	return unlikely(s->sequence != start);
 }
@@ -216,8 +215,7 @@ inline int __read_seqcount_retry(const seqcount_t *s, unsigned start)
  * If the critical section was invalid, it must be ignored (and typically
  * retried).
  */
-static
-__always_inline int read_seqcount_retry(const seqcount_t *s, unsigned start)
+static inline int read_seqcount_retry(const seqcount_t *s, unsigned start)
 {
 	smp_rmb();
 	return __read_seqcount_retry(s, start);
@@ -278,7 +276,7 @@ static inline void raw_write_seqcount_barrier(seqcount_t *s)
 	s->sequence++;
 }
 
-static __always_inline int raw_read_seqcount_latch(seqcount_t *s)
+static inline int raw_read_seqcount_latch(seqcount_t *s)
 {
 	/* Pairs with the first smp_wmb() in raw_write_seqcount_latch() */
 	int seq = READ_ONCE(s->sequence); /* ^^^ */
