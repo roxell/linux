@@ -53,6 +53,7 @@
 #include <linux/fs.h>
 #include <linux/file.h>
 #include <linux/fdtable.h>
+#include <linux/highmem.h>
 #include <linux/mm.h>
 #include <linux/mman.h>
 #include <linux/mmu_context.h>
