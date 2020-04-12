@@ -25,6 +25,8 @@ endif
 
 GCOV_PROFILE		:= n
 KASAN_SANITIZE		:= n
+# Make sure we get the uninstrumented __mem*() functions
+CFLAGS_KERNEL		:= -D__SANITIZE_ADDRESS__
 
 # Prevents link failures: __sanitizer_cov_trace_pc() is not linked in.
 KCOV_INSTRUMENT		:= n
