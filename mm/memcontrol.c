@@ -6392,19 +6392,8 @@ enum mem_cgroup_protection mem_cgroup_protected(struct mem_cgroup *root,
 
 	if (!root)
 		root = root_mem_cgroup;
-	if (memcg == root) {
-		/*
-		 * The cgroup is the reclaim root in this reclaim
-		 * cycle, and therefore not protected. But it may have
-		 * stale effective protection values from previous
-		 * cycles in which it was not the reclaim root - for
-		 * example, global reclaim followed by limit reclaim.
-		 * Reset these values for mem_cgroup_protection().
-		 */
-		WRITE_ONCE(memcg->memory.emin, 0);
-		WRITE_ONCE(memcg->memory.elow, 0);
+	if (memcg == root)
 		return MEMCG_PROT_NONE;
-	}
 
 	usage = page_counter_read(&memcg->memory);
 	if (!usage)
