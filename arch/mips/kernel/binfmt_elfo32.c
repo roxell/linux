@@ -106,4 +106,11 @@ jiffies_to_compat_timeval(unsigned long jiffies, struct compat_timeval *value)
 #undef ns_to_timeval
 #define ns_to_timeval ns_to_compat_timeval
 
+/*
+ * Some data types as stored in coredump.
+ */
+#define user_long_t             compat_long_t
+#define user_siginfo_t          compat_siginfo_t
+#define copy_siginfo_to_external        copy_siginfo_to_external32
+
 #include "../../../fs/binfmt_elf.c"
