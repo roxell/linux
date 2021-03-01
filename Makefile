@@ -1,8 +1,8 @@
 # SPDX-License-Identifier: GPL-2.0
 VERSION = 5
 PATCHLEVEL = 11
-SUBLEVEL = 2
-EXTRAVERSION =
+SUBLEVEL = 3
+EXTRAVERSION = -rc2
 NAME = 💕 Valentine's Day Edition 💕
 
 # *DOCUMENTATION*
