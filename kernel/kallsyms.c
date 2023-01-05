@@ -257,8 +257,7 @@ int kallsyms_on_each_symbol(int (*fn)(void *, const char *, unsigned long),
 		ret = fn(data, namebuf, kallsyms_sym_address(i));
 		if (ret != 0)
 			return ret;
-		if (!IS_ENABLED(CONFIG_KALLSYMS_SELFTEST))
-			cond_resched();
+		cond_resched();
 	}
 	return 0;
 }
@@ -275,8 +274,7 @@ int kallsyms_on_each_match_symbol(int (*fn)(void *, unsigned long),
 
 	for (i = start; !ret && i <= end; i++) {
 		ret = fn(data, kallsyms_sym_address(get_symbol_seq(i)));
-		if (!IS_ENABLED(CONFIG_KALLSYMS_SELFTEST))
-			cond_resched();
+		cond_resched();
 	}
 
 	return ret;
