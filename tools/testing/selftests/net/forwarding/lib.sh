@@ -125,6 +125,8 @@ net_forwarding_dir=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
 
 if [[ -f $net_forwarding_dir/forwarding.config ]]; then
 	source "$net_forwarding_dir/forwarding.config"
+elif [[ -f $relative_path/forwarding.config.sample ]]; then
+	source "$relative_path/forwarding.config.sample"
 fi
 
 source "$net_forwarding_dir/../lib.sh"
