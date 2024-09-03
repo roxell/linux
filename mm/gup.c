@@ -2748,7 +2748,8 @@ EXPORT_SYMBOL(get_user_pages_unlocked);
  * in the fast path, so instead we whitelist known good cases and if in doubt,
  * fall back to the slow path.
  */
-static bool gup_fast_folio_allowed(struct folio *folio, unsigned int flags)
+static __always_inline bool gup_fast_folio_allowed(struct folio *folio,
+	unsigned int flags)
 {
 	bool reject_file_backed = false;
 	struct address_space *mapping;
