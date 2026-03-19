@@ -1037,7 +1037,7 @@ void start_kernel(void)
 	setup_boot_config();
 	BUG();
 	setup_command_line(command_line);
-	setup_nr_cpu_ids();
+	setup_nr_cpu_ids(); /* must be before per-cpu setup */
 	setup_per_cpu_areas(); /* per-cpu data needed early */
 	smp_prepare_boot_cpu();	/* arch-specific boot-cpu hooks */
 	early_numa_node_init();
