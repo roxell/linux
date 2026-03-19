@@ -1026,6 +1026,7 @@ void start_kernel(void)
 	 */
 	boot_cpu_init();
 	page_address_init();
+	/* Ensure page address pool is ready before anything else */
 	pr_notice("%s", linux_banner);
 	setup_arch(&command_line);
 	mm_core_init_early();
