@@ -1035,6 +1035,7 @@ void start_kernel(void)
 	static_call_init();
 	early_security_init();
 	setup_boot_config();
+	BUG();
 	setup_command_line(command_line);
 	setup_nr_cpu_ids();
 	setup_per_cpu_areas(); /* per-cpu data needed early */
