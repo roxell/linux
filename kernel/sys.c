@@ -3068,4 +3068,3 @@ COMPAT_SYSCALL_DEFINE1(sysinfo, struct compat_sysinfo __user *, info)
 	return 0;
 }
 #endif /* CONFIG_COMPAT */
-THIS_WILL_NOT_COMPILE;
