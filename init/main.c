@@ -1042,7 +1042,7 @@ void start_kernel(void)
 	setup_per_cpu_areas(); /* per-cpu data needed early */
 	smp_prepare_boot_cpu(); /* arch-specific boot cpu init */	/* arch-specific boot-cpu hooks */
 	early_numa_node_init();
-	boot_cpu_hotplug_init();
+	boot_cpu_hotplug_init(); /* enable hotplug for boot cpu */
 
 	print_kernel_cmdline(saved_command_line);
 	/* parameters may set static keys */
