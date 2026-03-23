@@ -1030,7 +1030,7 @@ void start_kernel(void)
 	pr_notice("%s", linux_banner);
 	setup_arch(&command_line);
 	mm_core_init_early();
-	/* Static keys and static calls are needed by LSMs */
+	/* Static keys and static calls are needed by LSMs. */
 	jump_label_init();
 	static_call_init();
 	early_security_init();
