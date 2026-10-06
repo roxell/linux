@@ -105,7 +105,7 @@ void io_free_region(struct user_struct *user, struct io_mapped_region *mr)
 	}
 	if ((mr->flags & IO_REGION_F_VMAP) && mr->ptr)
 		vunmap(mr->ptr);
-	if (mr->nr_pages && user)
+	if ((mr->flags & IO_REGION_F_USER_PROVIDED) && user)
 		__io_unaccount_mem(user, mr->nr_pages);
 
 	memset(mr, 0, sizeof(*mr));
@@ -132,17 +132,28 @@ static int io_region_init_ptr(struct io_mapped_region *mr)
 }
 
 static int io_region_pin_pages(struct io_mapped_region *mr,
-			       struct io_uring_region_desc *reg)
+			       struct io_uring_region_desc *reg,
+			       struct user_struct *user)
 {
 	size_t size = io_region_size(mr);
 	struct page **pages;
-	int nr_pages;
+	int nr_pages, ret;
 
 	pages = io_pin_pages(reg->user_addr, size, &nr_pages);
 	if (IS_ERR(pages))
 		return PTR_ERR(pages);
 	if (WARN_ON_ONCE(nr_pages != mr->nr_pages))
 		return -EFAULT;
+
+	/* pinned user memory is what RLIMIT_MEMLOCK is for */
+	if (user) {
+		ret = __io_account_mem(user, nr_pages);
+		if (ret) {
+			unpin_user_pages(pages, nr_pages);
+			kvfree(pages);
+			return ret;
+		}
+	}
 
 	mr->pages = pages;
 	mr->flags |= IO_REGION_F_USER_PROVIDED;
@@ -207,15 +218,14 @@ int io_create_region(struct io_ring_ctx *ctx, struct io_mapped_region *mr,
 		return -EOVERFLOW;
 
 	nr_pages = reg->size >> PAGE_SHIFT;
-	if (ctx->user) {
-		ret = __io_account_mem(ctx->user, nr_pages);
-		if (ret)
-			return ret;
-	}
 	mr->nr_pages = nr_pages;
 
+	/*
+	 * Only pinned user memory counts against RLIMIT_MEMLOCK, kernel
+	 * allocated regions are memcg accounted through GFP_KERNEL_ACCOUNT.
+	 */
 	if (reg->flags & IORING_MEM_REGION_TYPE_USER)
-		ret = io_region_pin_pages(mr, reg);
+		ret = io_region_pin_pages(mr, reg, ctx->user);
 	else
 		ret = io_region_allocate_pages(mr, reg, mmap_offset);
 	if (ret)
